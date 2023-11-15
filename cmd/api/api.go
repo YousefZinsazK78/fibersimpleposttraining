@@ -1,7 +1,8 @@
 package main
 
-import "log"
+import "fmt"
 
 func main() {
-	log.Println("this is test from main package")
+	fmt.Println("this is just a test from yousef")
+
 }
