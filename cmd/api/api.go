@@ -11,5 +11,8 @@ func main() {
 	port := flag.String("default port", ":8000", "you can set your custom font")
 	flag.Parse()
 
-	routes.Run(*port)
+	//todo : implement database
+	//todo :
+
+	routes.Run(*port, nil)
 }
