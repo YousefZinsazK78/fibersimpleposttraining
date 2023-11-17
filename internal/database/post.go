@@ -10,8 +10,20 @@ type Poster interface {
 	Insert(context.Context, models.PostInsertParams) error
 }
 
-type post struct{}
+type post struct {
+	database
+}
 
-func NewPostDB() post {
-	return post{}
+func NewPostDB(db database) post {
+	return post{
+		database: db,
+	}
+}
+
+func (p post) Insert(ctx context.Context, postModel models.PostInsertParams) error {
+	//todo : write sql query with sqlbuilder
+	//todo : use db
+
+	// p.db.QueryContext(ctx, sql, args)
+	return nil
 }
