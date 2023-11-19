@@ -31,7 +31,7 @@ func (h handler) GetPosts(c *fiber.Ctx) error {
 	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*2)
 	defer cancel()
 
-	postList, err := h.poster.GetPosts()
+	postList, err := h.poster.GetPosts(timeoutContext)
 	if err != nil {
 		return err
 	}
