@@ -12,12 +12,12 @@ func (h handler) PostInsert(c *fiber.Ctx) error {
 	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*2)
 	defer cancel()
 
-	var postInsertModel *models.PostInsertParams
-	if err := c.BodyParser(postInsertModel); err != nil {
+	var postInsertModel models.PostInsertParams
+	if err := c.BodyParser(&postInsertModel); err != nil {
 		return err
 	}
 
-	err := h.poster.Insert(timeoutContext, *postInsertModel)
+	err := h.poster.Insert(timeoutContext, postInsertModel)
 	if err != nil {
 		return err
 	}
