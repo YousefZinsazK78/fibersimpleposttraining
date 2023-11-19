@@ -7,11 +7,13 @@ import (
 
 type handler struct {
 	userer database.Userer
+	poster database.Poster
 }
 
-func NewHandler(userer database.Userer) handler {
+func NewHandler(userer database.Userer, poster database.Poster) handler {
 	return handler{
 		userer: userer,
+		poster: poster,
 	}
 }
 
