@@ -13,13 +13,17 @@ func Run(port string, db *sql.DB) {
 		app    = fiber.New()
 		dbase  = database.NewDatabase(db)
 		userdb = database.NewUserDB(dbase)
-		hndler = handler.NewHandler(userdb)
+		postdb = database.NewPostDB(dbase)
+		hndler = handler.NewHandler(userdb, postdb)
 		v1     = app.Group("/api/v1")
 	)
 
 	app.Get("/hello", hndler.Hello)
-	// v1 api -> user
+	// v1 api -> user api
 	v1.Post("/user", hndler.UserInsert)
+
+	//v1 api -> post api
+	v1.Post("/post", hndler.PostInsert)
 
 	app.Listen(port)
 }
