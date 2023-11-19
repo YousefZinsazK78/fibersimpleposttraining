@@ -26,3 +26,17 @@ func (h handler) PostInsert(c *fiber.Ctx) error {
 		"result": "your post insert successfully",
 	})
 }
+
+func (h handler) GetPosts(c *fiber.Ctx) error {
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*2)
+	defer cancel()
+
+	postList, err := h.poster.GetPosts()
+	if err != nil {
+		return err
+	}
+
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"result": postList,
+	})
+}
