@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 
+	"github.com/huandu/go-sqlbuilder"
 	"github.com/yousefzinsazk78/fiber_post_second_version/internal/models"
 )
 
@@ -21,9 +22,11 @@ func NewPostDB(db database) post {
 }
 
 func (p post) Insert(ctx context.Context, postModel models.PostInsertParams) error {
-	//todo : write sql query with sqlbuilder
-	//todo : use db
-
+	sqlB := sqlbuilder.NewInsertBuilder()
+	sqlB.InsertInto("users")
+	sqlB.Cols("username", "password", "email")
+	sqlB.Values(userModel.Username, userModel.Password, userModel.Email)
+	sql, args := sqlB.BuildWithFlavor(sqlbuilder.PostgreSQL)
 	// p.db.QueryContext(ctx, sql, args)
 	return nil
 }
