@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 
+	_ "github.com/lib/pq"
 	"github.com/yousefzinsazk78/fiber_post_second_version/internal/routes"
 )
 
