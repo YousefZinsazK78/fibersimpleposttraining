@@ -3,8 +3,8 @@ package routes
 import (
 	"database/sql"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/yousefzinsazk78/fiber_post_second_version/internal/database"
 	"github.com/yousefzinsazk78/fiber_post_second_version/internal/handler"
 )
@@ -19,10 +19,7 @@ func Run(port string, db *sql.DB) {
 		v1     = app.Group("/api/v1")
 	)
 
-	app.Use(cors.New(cors.Config{
-		AllowOrigins: "https://gofiber.io, https://gofiber.net",
-		AllowHeaders: "Origin, Content-Type, Accept",
-	}))
+	app.Use(cors.New(cors.Config{}))
 
 	app.Get("/hello", hndler.Hello)
 	// v1 api -> user api
