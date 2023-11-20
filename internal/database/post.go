@@ -11,7 +11,7 @@ type Poster interface {
 	Insert(context.Context, models.PostInsertParams) error
 	GetPosts(context.Context) ([]models.Post, error)
 	GetPostByID(context.Context, int) (*models.Post, error)
-	GetPostByTitle(context.Context, string) (*models.Post, error)
+	GetPostByTitle(context.Context, string) ([]models.Post, error)
 }
 
 type post struct {
@@ -80,4 +80,31 @@ func (p post) GetPostByID(ctx context.Context, id int) (*models.Post, error) {
 	}
 
 	return &post, nil
+}
+
+func (p post) GetPostByTitle(ctx context.Context, title string) ([]models.Post, error) {
+	sqlB := sqlbuilder.NewSelectBuilder()
+	sqlB.Select("*")
+	sqlB.From("post_tbl")
+	sqlB.Where(
+		sqlB.Like("title", title),
+	)
+	sql, args := sqlB.BuildWithFlavor(sqlbuilder.PostgreSQL)
+
+	rows, err := p.db.QueryContext(ctx, sql, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var posts []models.Post
+	for rows.Next() {
+		var post models.Post
+		if err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.CreatedAt, &post.UpdatedAt); err != nil {
+			return nil, err
+		}
+		posts = append(posts, post)
+	}
+
+	return posts, nil
 }
