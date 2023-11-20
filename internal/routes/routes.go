@@ -25,6 +25,8 @@ func Run(port string, db *sql.DB) {
 	//v1 api -> post api
 	v1.Post("/post", hndler.PostInsert)
 	v1.Get("/posts", hndler.GetPosts)
+	v1.Get("/post/id/:id", hndler.GetPostByID)
+	v1.Get("/post/title/:title", hndler.GetPostByTitle)
 
 	app.Listen(port)
 }
