@@ -87,7 +87,7 @@ func (p post) GetPostByTitle(ctx context.Context, title string) ([]models.Post, 
 	sqlB.Select("*")
 	sqlB.From("post_tbl")
 	sqlB.Where(
-		sqlB.Like("title", title),
+		sqlB.Like("title", "%"+title+"%"),
 	)
 	sql, args := sqlB.BuildWithFlavor(sqlbuilder.PostgreSQL)
 
