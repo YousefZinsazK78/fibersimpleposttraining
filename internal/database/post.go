@@ -121,6 +121,7 @@ func (p post) Update(ctx context.Context, postModels models.PostUpdateParams) (*
 	sqlB.Update("post_tbl")
 	sqlB.Set(
 		sqlB.Assign("title", postModels.Title),
+		"updatedat = CURRENT_TIMESTAMP",
 	)
 	sqlB.Where(
 		sqlB.Equal("post_id", postModels.ID),
