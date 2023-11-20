@@ -10,6 +10,8 @@ import (
 type Poster interface {
 	Insert(context.Context, models.PostInsertParams) error
 	GetPosts(context.Context) ([]models.Post, error)
+	GetPostByID(context.Context, int) (*models.Post, error)
+	GetPostByTitle(context.Context, string) (*models.Post, error)
 }
 
 type post struct {
@@ -59,4 +61,23 @@ func (p post) GetPosts(ctx context.Context) ([]models.Post, error) {
 	}
 
 	return posts, nil
+}
+
+func (p post) GetPostByID(ctx context.Context, id int) (*models.Post, error) {
+	sqlB := sqlbuilder.NewSelectBuilder()
+	sqlB.Select("*")
+	sqlB.From("post_tbl")
+	sqlB.Where(
+		sqlB.Equal("id", id),
+	)
+	sql, args := sqlB.BuildWithFlavor(sqlbuilder.PostgreSQL)
+
+	row := p.db.QueryRowContext(ctx, sql, args...)
+
+	var post models.Post
+	if err := row.Scan(&post.ID, &post.Title, &post.Content, &post.CreatedAt, &post.UpdatedAt); err != nil {
+		return nil, err
+	}
+
+	return &post, nil
 }
