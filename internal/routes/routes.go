@@ -19,7 +19,10 @@ func Run(port string, db *sql.DB) {
 		v1     = app.Group("/api/v1")
 	)
 
-	app.Use(cors.New(cors.Config{}))
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*",
+		AllowHeaders: "*",
+	}))
 
 	app.Get("/hello", hndler.Hello)
 	// v1 api -> user api
