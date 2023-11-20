@@ -62,3 +62,17 @@ func (h handler) GetPostByID(c *fiber.Ctx) error {
 		"result": post,
 	})
 }
+
+func (h handler) GetPostByTitle(c *fiber.Ctx) error {
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*2)
+	defer cancel()
+
+	posts, err := h.poster.GetPostByTitle(timeoutContext, c.Params("title"))
+	if err != nil {
+		return err
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"result": posts,
+	})
+}
