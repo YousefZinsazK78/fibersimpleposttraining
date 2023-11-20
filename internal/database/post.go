@@ -68,7 +68,7 @@ func (p post) GetPostByID(ctx context.Context, id int) (*models.Post, error) {
 	sqlB.Select("*")
 	sqlB.From("post_tbl")
 	sqlB.Where(
-		sqlB.Equal("id", id),
+		sqlB.Equal("post_id", id),
 	)
 	sql, args := sqlB.BuildWithFlavor(sqlbuilder.PostgreSQL)
 
