@@ -32,5 +32,6 @@ type PostInsertParams struct {
 }
 
 type PostUpdateParams struct {
+	ID    int    `json:"id"`
 	Title string `json:"title"`
 }

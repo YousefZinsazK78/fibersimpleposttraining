@@ -14,6 +14,7 @@ type Poster interface {
 	GetPosts(context.Context) ([]models.Post, error)
 	GetPostByID(context.Context, int) (*models.Post, error)
 	GetPostByTitle(context.Context, string) ([]models.Post, error)
+	Update(context.Context, models.PostUpdateParams) (*models.Post, error)
 }
 
 type post struct {
@@ -75,6 +76,9 @@ func (p post) GetPostByID(ctx context.Context, id int) (*models.Post, error) {
 	sql, args := sqlB.BuildWithFlavor(sqlbuilder.PostgreSQL)
 
 	row := p.db.QueryRowContext(ctx, sql, args...)
+	if row.Err() != nil {
+		return nil, row.Err()
+	}
 
 	var post models.Post
 	if err := row.Scan(&post.ID, &post.Title, &post.Content, &post.CreatedAt, &post.UpdatedAt); err != nil {
@@ -110,4 +114,28 @@ func (p post) GetPostByTitle(ctx context.Context, title string) ([]models.Post, 
 	}
 
 	return posts, nil
+}
+
+func (p post) Update(ctx context.Context, postModels models.PostUpdateParams) (*models.Post, error) {
+	sqlB := sqlbuilder.NewUpdateBuilder()
+	sqlB.Update("post_tbl")
+	sqlB.Set(
+		sqlB.Assign("title", postModels.Title),
+	)
+	sqlB.Where(
+		sqlB.Equal("post_id", postModels.ID),
+	)
+	sql, args := sqlB.BuildWithFlavor(sqlbuilder.PostgreSQL)
+
+	row := p.db.QueryRowContext(ctx, sql, args...)
+	if row.Err() != nil {
+		return nil, row.Err()
+	}
+
+	post, err := p.GetPostByID(ctx, postModels.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return post, nil
 }
