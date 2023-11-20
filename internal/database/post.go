@@ -2,6 +2,8 @@ package database
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/huandu/go-sqlbuilder"
 	"github.com/yousefzinsazk78/fiber_post_second_version/internal/models"
@@ -87,12 +89,13 @@ func (p post) GetPostByTitle(ctx context.Context, title string) ([]models.Post, 
 	sqlB.Select("*")
 	sqlB.From("post_tbl")
 	sqlB.Where(
-		sqlB.Like("title", "'%"+title+"%'"),
+		sqlB.Like("title", fmt.Sprintf("%%%s%%", strings.ReplaceAll(title, "%20", " "))),
 	)
 	sql, args := sqlB.BuildWithFlavor(sqlbuilder.PostgreSQL)
 
 	rows, err := p.db.QueryContext(ctx, sql, args...)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 	defer rows.Close()
