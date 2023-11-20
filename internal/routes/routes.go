@@ -27,6 +27,7 @@ func Run(port string, db *sql.DB) {
 	v1.Get("/posts", hndler.GetPosts)
 	v1.Get("/post/id/:id", hndler.GetPostByID)
 	v1.Get("/post/title/:title", hndler.GetPostByTitle)
+	v1.Put("/post/update/", hndler.PutPost)
 
 	app.Listen(port)
 }

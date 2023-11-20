@@ -76,3 +76,25 @@ func (h handler) GetPostByTitle(c *fiber.Ctx) error {
 		"result": posts,
 	})
 }
+
+func (h handler) PutPost(c *fiber.Ctx) error {
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*2)
+	defer cancel()
+
+	//body parser
+	var postmodel models.PostUpdateParams
+	if err := c.BodyParser(&postmodel); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "there is problem to get your json data",
+		})
+	}
+
+	post, err := h.poster.Update(timeoutContext, postmodel)
+	if err != nil {
+		return err
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"result": post,
+	})
+}
