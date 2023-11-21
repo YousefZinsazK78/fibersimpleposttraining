@@ -16,3 +16,4 @@
 3. create makefile and readme.md file
 4. seperate our route and handler into their packages
 5. push our commit to server
+6. curd in post api
