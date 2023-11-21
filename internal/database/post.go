@@ -15,6 +15,7 @@ type Poster interface {
 	GetPostByID(context.Context, int) (*models.Post, error)
 	GetPostByTitle(context.Context, string) ([]models.Post, error)
 	Update(context.Context, models.PostUpdateParams) (*models.Post, error)
+	Delete(context.Context, int) error
 }
 
 type post struct {
@@ -139,4 +140,20 @@ func (p post) Update(ctx context.Context, postModels models.PostUpdateParams) (*
 	}
 
 	return post, nil
+}
+
+func (p post) Delete(ctx context.Context, id int) error {
+	sqlB := sqlbuilder.NewDeleteBuilder()
+	sqlB.DeleteFrom("post_tbl")
+	sqlB.Where(
+		sqlB.Equal("post_id", id),
+	)
+	sql, args := sqlB.BuildWithFlavor(sqlbuilder.PostgreSQL)
+
+	row := p.db.QueryRowContext(ctx, sql, args...)
+	if row.Err() != nil {
+		return row.Err()
+	}
+
+	return nil
 }
