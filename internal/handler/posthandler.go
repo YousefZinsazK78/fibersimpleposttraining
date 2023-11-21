@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -10,7 +11,7 @@ import (
 )
 
 func (h handler) PostInsert(c *fiber.Ctx) error {
-	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*2)
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*1)
 	defer cancel()
 
 	var postInsertModel models.PostInsertParams
@@ -29,7 +30,7 @@ func (h handler) PostInsert(c *fiber.Ctx) error {
 }
 
 func (h handler) GetPosts(c *fiber.Ctx) error {
-	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*2)
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*1)
 	defer cancel()
 
 	postList, err := h.poster.GetPosts(timeoutContext)
@@ -43,7 +44,7 @@ func (h handler) GetPosts(c *fiber.Ctx) error {
 }
 
 func (h handler) GetPostByID(c *fiber.Ctx) error {
-	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*2)
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*1)
 	defer cancel()
 
 	id, err := strconv.Atoi(c.Params("id"))
@@ -64,7 +65,7 @@ func (h handler) GetPostByID(c *fiber.Ctx) error {
 }
 
 func (h handler) GetPostByTitle(c *fiber.Ctx) error {
-	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*2)
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*1)
 	defer cancel()
 
 	posts, err := h.poster.GetPostByTitle(timeoutContext, c.Params("title"))
@@ -78,7 +79,7 @@ func (h handler) GetPostByTitle(c *fiber.Ctx) error {
 }
 
 func (h handler) PutPost(c *fiber.Ctx) error {
-	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*2)
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*1)
 	defer cancel()
 
 	//body parser
@@ -96,5 +97,26 @@ func (h handler) PutPost(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"result": post,
+	})
+}
+
+func (h handler) DeletePost(c *fiber.Ctx) error {
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*1)
+	defer cancel()
+
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "can't convert id (id is still string 😥😥",
+		})
+	}
+
+	err = h.poster.Delete(timeoutContext, id)
+	if err != nil {
+		return err
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"result": fmt.Sprintf("%d delete successfuly", id),
 	})
 }
