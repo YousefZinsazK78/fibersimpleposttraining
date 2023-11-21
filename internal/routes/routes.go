@@ -14,7 +14,9 @@ import (
 
 func Run(port string, db *sql.DB) {
 	var (
-		app    = fiber.New()
+		app = fiber.New(fiber.Config{
+			ErrorHandler: handler.ErrorHandler,
+		})
 		dbase  = database.NewDatabase(db)
 		userdb = database.NewUserDB(dbase)
 		postdb = database.NewPostDB(dbase)
