@@ -5,12 +5,12 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/yousefzinsazk78/fiber_post_second_version/internal/database"
 	"github.com/yousefzinsazk78/fiber_post_second_version/internal/handler"
 )
 
 //todo : add logger to fiber
-//todo : error handling in fiber
 
 func Run(port string, db *sql.DB) {
 	var (
@@ -27,6 +27,10 @@ func Run(port string, db *sql.DB) {
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
 		AllowHeaders: "*",
+	}))
+
+	app.Use(logger.New(logger.Config{
+		Format: "[${ip}]:${port} ${status} - ${method} ${path}\n",
 	}))
 
 	app.Get("/hello", hndler.Hello)
