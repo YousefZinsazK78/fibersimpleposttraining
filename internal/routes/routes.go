@@ -10,8 +10,6 @@ import (
 	"github.com/yousefzinsazk78/fiber_post_second_version/internal/handler"
 )
 
-//todo : add logger to fiber
-
 func Run(port string, db *sql.DB) {
 	var (
 		app = fiber.New(fiber.Config{
