@@ -9,6 +9,9 @@ import (
 	"github.com/yousefzinsazk78/fiber_post_second_version/internal/handler"
 )
 
+//todo : add logger to fiber
+//todo : error handling in fiber
+
 func Run(port string, db *sql.DB) {
 	var (
 		app    = fiber.New()
@@ -35,7 +38,6 @@ func Run(port string, db *sql.DB) {
 	v1.Get("/post/title/:title", hndler.GetPostByTitle)
 	v1.Put("/post/update/", hndler.PutPost)
 	v1.Delete("/post/delete/:id", hndler.DeletePost)
-	//todo : add logger to app
 
 	app.Listen(port)
 }
