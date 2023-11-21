@@ -34,6 +34,8 @@ func Run(port string, db *sql.DB) {
 	v1.Get("/post/id/:id", hndler.GetPostByID)
 	v1.Get("/post/title/:title", hndler.GetPostByTitle)
 	v1.Put("/post/update/", hndler.PutPost)
+	//todo : delete method
+	//todo : add logger to app
 
 	app.Listen(port)
 }
