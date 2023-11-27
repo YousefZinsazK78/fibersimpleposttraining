@@ -1,0 +1,103 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "test blog api",
+    "dateExported": "2023-11-27T15:58:53.434Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "1a837c90-eff0-47d6-bb73-1656bdcc1b93",
+            "colId": "d1bf4dae-53ac-42db-b63f-c3540e7d23e7",
+            "containerId": "",
+            "name": "get all posts",
+            "url": "http://127.0.0.1:8000/api/v1/posts",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-11-27T13:59:14.945Z",
+            "modified": "2023-11-27T14:00:19.499Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "09150a64-b72a-4f82-a400-a85aa8e1d479",
+            "colId": "d1bf4dae-53ac-42db-b63f-c3540e7d23e7",
+            "containerId": "",
+            "name": "create post",
+            "url": "http://127.0.0.1:8000/api/v1/post",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-11-27T15:53:39.762Z",
+            "modified": "2023-11-27T15:58:37.553Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"title\" : \"fourth title ever\",\n  \"content\" : \"first asdf ever written by writer ...\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "441589bd-6c2b-495f-a5e5-45d027f8bbb5",
+            "colId": "d1bf4dae-53ac-42db-b63f-c3540e7d23e7",
+            "containerId": "",
+            "name": "get post by title",
+            "url": "http://127.0.0.1:8000/api/v1/post/title/t",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2023-11-27T15:54:29.964Z",
+            "modified": "2023-11-27T15:56:33.882Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "5687f62c-c225-478b-8c2a-96677b8f2dc2",
+            "colId": "d1bf4dae-53ac-42db-b63f-c3540e7d23e7",
+            "containerId": "",
+            "name": "get post by id",
+            "url": "http://127.0.0.1:8000/api/v1/post/id/1",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2023-11-27T15:55:21.196Z",
+            "modified": "2023-11-27T15:55:33.963Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "0b182ab2-ef4f-4764-9b89-8418b7720c09",
+            "colId": "d1bf4dae-53ac-42db-b63f-c3540e7d23e7",
+            "containerId": "",
+            "name": "update post",
+            "url": "http://127.0.0.1:8000/api/v1/post/update",
+            "method": "PUT",
+            "sortNum": 50000,
+            "created": "2023-11-27T15:56:42.747Z",
+            "modified": "2023-11-27T15:57:26.215Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\" : 1,\n  \"title\" : \"first title that has been updated ....\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "54c1619d-d41b-4882-a5e2-a88d9b1661b3",
+            "colId": "d1bf4dae-53ac-42db-b63f-c3540e7d23e7",
+            "containerId": "",
+            "name": "delete post",
+            "url": "http://127.0.0.1:8000/api/v1/post/delete/1",
+            "method": "DELETE",
+            "sortNum": 60000,
+            "created": "2023-11-27T15:57:44.971Z",
+            "modified": "2023-11-27T15:58:10.261Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}
