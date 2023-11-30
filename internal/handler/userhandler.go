@@ -10,7 +10,7 @@ import (
 )
 
 func (h handler) UserInsert(c *fiber.Ctx) error {
-	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*2)
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Millisecond*100)
 	defer cancel()
 
 	var userInsertModel models.UserInsertParams
@@ -22,6 +22,7 @@ func (h handler) UserInsert(c *fiber.Ctx) error {
 	if err != nil {
 		return models.NewCustomBlogError(fiber.StatusInternalServerError, err.Error())
 	}
+
 	userInsertModel.Password = hashedPassword
 
 	err = h.userer.Insert(timeoutContext, userInsertModel)
@@ -35,7 +36,7 @@ func (h handler) UserInsert(c *fiber.Ctx) error {
 }
 
 func (h handler) UserLogin(c *fiber.Ctx) error {
-	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Millisecond*50)
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Millisecond*100)
 	defer cancel()
 
 	var userLoginModel models.UserLoginParams
