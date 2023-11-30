@@ -17,6 +17,12 @@ type UserInsertParams struct {
 	Email    string `json:"email"`
 }
 
+type UserLoginParams struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 type Post struct {
 	ID        int       `json:"id"`
 	UserID    int       `json:"userid"`
