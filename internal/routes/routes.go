@@ -43,5 +43,8 @@ func Run(port string, db *sql.DB) {
 	v1.Put("/post/update/", hndler.PutPost)
 	v1.Delete("/post/delete/:id", hndler.DeletePost)
 
+	//#todo : admin api
+	//#todo : swagger or open api for api documentation
+
 	app.Listen(port)
 }
