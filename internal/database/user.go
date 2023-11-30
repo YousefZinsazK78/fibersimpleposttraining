@@ -26,8 +26,8 @@ func (u userDB) Insert(ctx context.Context, userModel models.UserInsertParams) e
 	//todo : use sql builder
 	sqlB := sqlbuilder.NewInsertBuilder()
 	sqlB.InsertInto("user_tbl")
-	sqlB.Cols("username", "HashPassword", "email")
-	sqlB.Values(userModel.Username, userModel.Password, userModel.Email)
+	sqlB.Cols("Username", "Email", "HashPassword")
+	sqlB.Values(userModel.Username, userModel.Email, userModel.Password)
 	sql, args := sqlB.BuildWithFlavor(sqlbuilder.PostgreSQL)
 
 	_, err := u.db.QueryContext(ctx, sql, args...)
