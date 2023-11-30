@@ -31,7 +31,12 @@ func Run(port string, db *sql.DB) {
 		Format: "[${ip}]:${port} ${status} - ${method} ${path}\n",
 	}))
 
+	app.Post("/auth/register", hndler.UserInsert)
+	app.Post("/auth/login", hndler.UserLogin)
+	app.Post("/auth/refresh", hndler.UserLogin)
+
 	app.Get("/hello", hndler.Hello)
+
 	// v1 api -> user api
 	v1.Post("/user", hndler.UserInsert)
 
