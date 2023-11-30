@@ -1,6 +1,12 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+)
+
+const SuperSecretPassword = "supersimplesecretkeypasswordin2023year21centuryh1h1@ZzZ#"
 
 type User struct {
 	ID        int       `json:"id"`
@@ -40,4 +46,9 @@ type PostInsertParams struct {
 type PostUpdateParams struct {
 	ID    int    `json:"id"`
 	Title string `json:"title"`
+}
+
+type CustomUserClaims struct {
+	Username string `json:"username"`
+	jwt.RegisteredClaims
 }
