@@ -13,12 +13,18 @@ func (h handler) UserInsert(c *fiber.Ctx) error {
 	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*2)
 	defer cancel()
 
-	var userInsertModel *models.UserInsertParams
-	if err := c.BodyParser(userInsertModel); err != nil {
+	var userInsertModel models.UserInsertParams
+	if err := c.BodyParser(&userInsertModel); err != nil {
 		return err
 	}
 
-	err := h.userer.Insert(timeoutContext, *userInsertModel)
+	hashedPassword, err := helper.HashPassword(userInsertModel.Password)
+	if err != nil {
+		return models.NewCustomBlogError(fiber.StatusInternalServerError, err.Error())
+	}
+	userInsertModel.Password = hashedPassword
+
+	err = h.userer.Insert(timeoutContext, userInsertModel)
 	if err != nil {
 		return err
 	}
@@ -29,11 +35,11 @@ func (h handler) UserInsert(c *fiber.Ctx) error {
 }
 
 func (h handler) UserLogin(c *fiber.Ctx) error {
-	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Second*2)
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Millisecond*50)
 	defer cancel()
 
-	var userLoginModel *models.UserLoginParams
-	if err := c.BodyParser(userLoginModel); err != nil {
+	var userLoginModel models.UserLoginParams
+	if err := c.BodyParser(&userLoginModel); err != nil {
 		return err
 	}
 
@@ -42,8 +48,8 @@ func (h handler) UserLogin(c *fiber.Ctx) error {
 		return err
 	}
 
-	if helper.ComparePassword(user.Password, userLoginModel.Password) != nil {
-		return models.NewCustomBlogError(fiber.StatusNotFound, "invalid credintials")
+	if !helper.ComparePassword(user.Password, userLoginModel.Password) {
+		return models.NewCustomBlogError(fiber.StatusInternalServerError, "invalid credintials")
 	}
 
 	tokenstring := helper.GenerateJwtToken(user.Username)

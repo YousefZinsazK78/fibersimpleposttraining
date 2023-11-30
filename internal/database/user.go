@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/huandu/go-sqlbuilder"
 	"github.com/yousefzinsazk78/fiber_post_second_version/internal/models"
@@ -24,6 +25,7 @@ func NewUserDB(db database) userDB {
 
 func (u userDB) Insert(ctx context.Context, userModel models.UserInsertParams) error {
 	//todo : use sql builder
+	fmt.Println(userModel)
 	sqlB := sqlbuilder.NewInsertBuilder()
 	sqlB.InsertInto("user_tbl")
 	sqlB.Cols("Username", "Email", "HashPassword")
@@ -53,7 +55,7 @@ func (u userDB) GetByUsername(ctx context.Context, username string) (*models.Use
 	}
 
 	var user models.User
-	if err := row.Scan(&user.ID, &user.Username, &user.Password, &user.Email, &user.CreatedAt, &user.UpdatedAt); err != nil {
+	if err := row.Scan(&user.ID, &user.Username, &user.Email, &user.Password, &user.CreatedAt, &user.UpdatedAt); err != nil {
 		return nil, err
 	}
 
