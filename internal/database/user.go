@@ -86,3 +86,25 @@ func (u userDB) GetUsers(ctx context.Context) ([]models.User, error) {
 	}
 	return users, nil
 }
+
+func (u userDB) GetUserByID(ctx context.Context, id int) (*models.User, error) {
+	sqlB := sqlbuilder.NewSelectBuilder()
+	sqlB.Select("*")
+	sqlB.From("user_tbl")
+	sqlB.Where(
+		sqlB.Equal("user_id", id),
+	)
+	sql, args := sqlB.BuildWithFlavor(sqlbuilder.PostgreSQL)
+
+	row := u.db.QueryRowContext(ctx, sql, args...)
+	if row.Err() != nil {
+		return nil, row.Err()
+	}
+
+	var user models.User
+	if err := row.Scan(&user.ID, &user.Username, &user.Email, &user.Password, &user.CreatedAt, &user.UpdatedAt); err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
