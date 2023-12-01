@@ -8,6 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/yousefzinsazk78/fiber_post_second_version/internal/database"
 	"github.com/yousefzinsazk78/fiber_post_second_version/internal/handler"
+	"github.com/yousefzinsazk78/fiber_post_second_version/internal/middleware"
 )
 
 func Run(port string, db *sql.DB) {
@@ -39,6 +40,9 @@ func Run(port string, db *sql.DB) {
 	//hello world smiple api
 	app.Get("/hello", hndler.Hello)
 
+	// jwt and auth middleware
+	admin.Use(middleware.JWTMiddleware())
+
 	// admin api -> user api
 	admin.Post("/user", hndler.UserInsert)
 	admin.Get("/users", hndler.UserInsert)
@@ -51,7 +55,6 @@ func Run(port string, db *sql.DB) {
 	v1.Put("/post/update/", hndler.PutPost)
 	v1.Delete("/post/delete/:id", hndler.DeletePost)
 
-	//#todo : auth and jwt
 	//#todo : swagger or open api for api documentation
 
 	app.Listen(port)
