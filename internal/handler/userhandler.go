@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"strconv"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -82,14 +81,14 @@ func (h handler) GetUserByID(c *fiber.Ctx) error {
 	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Millisecond*100)
 	defer cancel()
 
-	id, err := strconv.Atoi(c.Params("id"))
+	id, err := c.ParamsInt("id")
 	if err != nil {
-		return models.CantConvertError()
+		return models.NewCustomBlogError(fiber.StatusInternalServerError, err.Error())
 	}
 
 	user, err := h.userer.GetUserByID(timeoutContext, id)
 	if err != nil {
-		return err
+		return models.NewCustomBlogError(fiber.StatusInternalServerError, err.Error())
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
