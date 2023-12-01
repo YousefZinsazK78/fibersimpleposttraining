@@ -50,6 +50,7 @@ func Run(port string, db *sql.DB) {
 	admin.Get("/user/email/:email", hndler.GetUserByEmail)
 	admin.Get("/user/username/:username", hndler.GetByUsername)
 	admin.Put("/user/update", hndler.UpdateUser)
+	admin.Delete("/user/delete/:id", hndler.DeleteUser)
 
 	//v1 api -> post api
 	v1.Post("/post", hndler.PostInsert)

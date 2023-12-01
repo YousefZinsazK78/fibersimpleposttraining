@@ -15,6 +15,7 @@ type Userer interface {
 	GetUserByID(context.Context, int) (*models.User, error)
 	GetUserByEmail(context.Context, string) (*models.User, error)
 	Update(context.Context, models.UserUpdateParams) (*models.User, error)
+	Delete(context.Context, int) error
 }
 
 type userDB struct {
@@ -155,4 +156,20 @@ func (u userDB) Update(ctx context.Context, userModel models.UserUpdateParams) (
 	}
 
 	return user, nil
+}
+
+func (u userDB) Delete(ctx context.Context, id int) error {
+	sqlB := sqlbuilder.NewDeleteBuilder()
+	sqlB.DeleteFrom("user_tbl")
+	sqlB.Where(
+		sqlB.Equal("user_id", id),
+	)
+	sql, args := sqlB.BuildWithFlavor(sqlbuilder.PostgreSQL)
+
+	row := u.db.QueryRowContext(ctx, sql, args...)
+	if row.Err() != nil {
+		return row.Err()
+	}
+
+	return nil
 }
