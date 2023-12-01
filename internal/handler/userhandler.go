@@ -142,3 +142,22 @@ func (h handler) UpdateUser(c *fiber.Ctx) error {
 		"result": user,
 	})
 }
+
+func (h handler) DeleteUser(c *fiber.Ctx) error {
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Millisecond*100)
+	defer cancel()
+
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return models.CantConvertError()
+	}
+
+	err = h.userer.Delete(timeoutContext, id)
+	if err != nil {
+		return models.InternalServerError()
+	}
+
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
+		"result": "delete successfully...",
+	})
+}
