@@ -45,7 +45,10 @@ func Run(port string, db *sql.DB) {
 
 	// admin api -> user api
 	admin.Post("/user", hndler.UserInsert)
-	admin.Get("/users", hndler.UserInsert)
+	admin.Get("/users", hndler.GetUsers)
+	admin.Get("/user/id/:id", hndler.GetUserByID)
+	admin.Get("/user/email/:email", hndler.GetUserByEmail)
+	admin.Get("/user/username/:username", hndler.GetByUsername)
 
 	//v1 api -> post api
 	v1.Post("/post", hndler.PostInsert)

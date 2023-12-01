@@ -110,3 +110,17 @@ func (h handler) GetUserByEmail(c *fiber.Ctx) error {
 		"result": user,
 	})
 }
+
+func (h handler) GetByUsername(c *fiber.Ctx) error {
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Millisecond*100)
+	defer cancel()
+
+	user, err := h.userer.GetByUsername(timeoutContext, c.Params("username"))
+	if err != nil {
+		return err
+	}
+
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"result": user,
+	})
+}
