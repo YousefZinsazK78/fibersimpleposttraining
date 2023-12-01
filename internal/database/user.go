@@ -11,6 +11,9 @@ import (
 type Userer interface {
 	Insert(context.Context, models.UserInsertParams) error
 	GetByUsername(context.Context, string) (*models.User, error)
+	GetUsers(context.Context) ([]models.User, error)
+	GetUserByID(context.Context, int) (*models.User, error)
+	GetUserByEmail(context.Context, string) (*models.User, error)
 }
 
 type userDB struct {
@@ -24,7 +27,6 @@ func NewUserDB(db database) userDB {
 }
 
 func (u userDB) Insert(ctx context.Context, userModel models.UserInsertParams) error {
-	//todo : use sql builder
 	fmt.Println(userModel)
 	sqlB := sqlbuilder.NewInsertBuilder()
 	sqlB.InsertInto("user_tbl")
@@ -60,4 +62,27 @@ func (u userDB) GetByUsername(ctx context.Context, username string) (*models.Use
 	}
 
 	return &user, nil
+}
+
+func (u userDB) GetUsers(ctx context.Context) ([]models.User, error) {
+	sqlB := sqlbuilder.NewSelectBuilder()
+	sqlB.Select("*")
+	sqlB.From("user_tbl")
+	sql, args := sqlB.BuildWithFlavor(sqlbuilder.PostgreSQL)
+
+	rows, err := u.db.QueryContext(ctx, sql, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []models.User
+	for rows.Next() {
+		var user models.User
+		if err := rows.Scan(&user.ID, &user.Username, &user.Email, &user.Password, &user.CreatedAt, &user.UpdatedAt); err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
 }
