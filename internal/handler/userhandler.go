@@ -57,7 +57,7 @@ func (h handler) UserLogin(c *fiber.Ctx) error {
 
 	c.Request().Header.Add("Authorization", "Bearer "+tokenstring)
 
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
 		"result":   "user login successfully",
 		"jwtToken": tokenstring,
 	})
@@ -72,7 +72,7 @@ func (h handler) GetUsers(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
 		"result": users,
 	})
 }
@@ -91,7 +91,7 @@ func (h handler) GetUserByID(c *fiber.Ctx) error {
 		return models.NewCustomBlogError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
 		"result": user,
 	})
 }
@@ -105,7 +105,7 @@ func (h handler) GetUserByEmail(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
 		"result": user,
 	})
 }
@@ -119,7 +119,26 @@ func (h handler) GetByUsername(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
+		"result": user,
+	})
+}
+
+func (h handler) UpdateUser(c *fiber.Ctx) error {
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Millisecond*100)
+	defer cancel()
+
+	var userUpdateParams models.UserUpdateParams
+	if err := c.BodyParser(&userUpdateParams); err != nil {
+		return models.InternalServerError()
+	}
+
+	user, err := h.userer.Update(timeoutContext, userUpdateParams)
+	if err != nil {
+		return models.InternalServerError()
+	}
+
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
 		"result": user,
 	})
 }
