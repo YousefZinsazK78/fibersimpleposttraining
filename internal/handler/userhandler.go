@@ -55,6 +55,8 @@ func (h handler) UserLogin(c *fiber.Ctx) error {
 
 	tokenstring := helper.GenerateJwtToken(user.Username)
 
+	c.Request().Header.Add("Authorization", "Bearer "+tokenstring)
+
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"result":   "user login successfully",
 		"jwtToken": tokenstring,

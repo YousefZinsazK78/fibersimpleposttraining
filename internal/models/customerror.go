@@ -20,6 +20,20 @@ func InternalServerError() error {
 	}
 }
 
+func UnAuthorizedError() error {
+	return CustomErrorBlog{
+		Code:    fiber.StatusUnauthorized,
+		Message: "UnAuthorized! 🤨🤨",
+	}
+}
+
+func TokenExpiredError() error {
+	return CustomErrorBlog{
+		Code:    fiber.StatusUnauthorized,
+		Message: "Token Expired! 🤨🤨",
+	}
+}
+
 func CantConvertError() error {
 	return CustomErrorBlog{
 		Code:    fiber.StatusInternalServerError,
