@@ -62,3 +62,17 @@ func (h handler) UserLogin(c *fiber.Ctx) error {
 		"jwtToken": tokenstring,
 	})
 }
+
+func (h handler) GetUsers(c *fiber.Ctx) error {
+	timeoutContext, cancel := context.WithTimeout(c.Context(), time.Millisecond*100)
+	defer cancel()
+
+	users, err := h.userer.GetUsers(timeoutContext)
+	if err != nil {
+		return err
+	}
+
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"result": users,
+	})
+}
