@@ -14,6 +14,7 @@ type Userer interface {
 	GetUsers(context.Context) ([]models.User, error)
 	GetUserByID(context.Context, int) (*models.User, error)
 	GetUserByEmail(context.Context, string) (*models.User, error)
+	Update(context.Context, models.UserUpdateParams) (*models.User, error)
 }
 
 type userDB struct {
@@ -129,4 +130,29 @@ func (u userDB) GetUserByEmail(ctx context.Context, email string) (*models.User,
 	}
 
 	return &user, nil
+}
+
+func (u userDB) Update(ctx context.Context, userModel models.UserUpdateParams) (*models.User, error) {
+	sqlB := sqlbuilder.NewUpdateBuilder()
+	sqlB.Update("user_tbl")
+	sqlB.Set(
+		sqlB.Assign("username", userModel.Username),
+		"updatedat = CURRENT_TIMESTAMP",
+	)
+	sqlB.Where(
+		sqlB.Equal("user_id", userModel.ID),
+	)
+	sql, args := sqlB.BuildWithFlavor(sqlbuilder.PostgreSQL)
+
+	row := u.db.QueryRowContext(ctx, sql, args...)
+	if row.Err() != nil {
+		return nil, row.Err()
+	}
+
+	user, err := u.GetUserByID(ctx, userModel.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }

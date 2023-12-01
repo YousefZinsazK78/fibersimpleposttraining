@@ -17,6 +17,11 @@ type User struct {
 	UpdatedAt time.Time `json:"updatedat"`
 }
 
+type UserUpdateParams struct {
+	ID       int    `json:"id"`
+	Username string `json:"username"`
+}
+
 type UserInsertParams struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
