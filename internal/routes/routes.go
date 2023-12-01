@@ -20,6 +20,7 @@ func Run(port string, db *sql.DB) {
 		postdb = database.NewPostDB(dbase)
 		hndler = handler.NewHandler(userdb, postdb)
 		v1     = app.Group("/api/v1")
+		admin  = app.Group("/admin/")
 	)
 
 	app.Use(cors.New(cors.Config{
@@ -35,10 +36,12 @@ func Run(port string, db *sql.DB) {
 	app.Post("/auth/login", hndler.UserLogin)
 	app.Post("/auth/refresh", hndler.UserLogin)
 
+	//hello world smiple api
 	app.Get("/hello", hndler.Hello)
 
-	// v1 api -> user api
-	v1.Post("/user", hndler.UserInsert)
+	// admin api -> user api
+	admin.Post("/user", hndler.UserInsert)
+	admin.Get("/users", hndler.UserInsert)
 
 	//v1 api -> post api
 	v1.Post("/post", hndler.PostInsert)
@@ -49,7 +52,6 @@ func Run(port string, db *sql.DB) {
 	v1.Delete("/post/delete/:id", hndler.DeletePost)
 
 	//#todo : auth and jwt
-	//#todo : admin api
 	//#todo : swagger or open api for api documentation
 
 	app.Listen(port)
